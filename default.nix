@@ -137,14 +137,13 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 etc/udev/rules.d/72-signalrgb.rules $out/lib/udev/rules.d/72-signalrgb.rules
-    substituteInPlace $out/lib/udev/rules.d/72-signalrgb.rules \
-      --replace-fail "/bin/chmod" "${coreutils}/bin/chmod"
-
     mkdir -p $out/opt $out/bin $out/share $out/lib/udev/rules.d
     cp -r opt/signalrgb $out/opt/
     cp -r usr/share/* $out/share/
-    install -Dm644 etc/udev/rules.d/72-signalrgb.rules $out/lib/udev/rules.d/
+
+    install -Dm644 etc/udev/rules.d/72-signalrgb.rules $out/lib/udev/rules.d/72-signalrgb.rules
+    substituteInPlace $out/lib/udev/rules.d/72-signalrgb.rules \
+      --replace-fail "/bin/chmod" "${coreutils}/bin/chmod"
 
     makeWrapper $out/opt/signalrgb/SignalRgb $out/bin/signalrgb \
       --set QT_PLUGIN_PATH  $out/opt/signalrgb/plugins \
