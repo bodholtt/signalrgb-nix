@@ -32,7 +32,6 @@ inputs.
 
 `configuration.nix`:
 ```nix
-imports = [ signalrgb.nixosModules.default ];
 programs.signalrgb = {
     enable = true;
 
