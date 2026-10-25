@@ -7,7 +7,6 @@ Use at your own risk, and expect it to break at any time
 
 `flake.nix`:
 ```nix
-inputs.
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";

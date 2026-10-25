@@ -137,7 +137,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/opt $out/bin $out/share $out/lib/udev/rules.d
+    mkdir -p $out/opt $out/share
     cp -r opt/signalrgb $out/opt/
     cp -r usr/share/* $out/share/
 
@@ -160,13 +160,12 @@ stdenv.mkDerivation {
     substituteInPlace $out/share/applications/signalrgb.desktop \
       --replace-quiet "/usr/bin/signalrgb" "$out/bin/signalrgb"
 
+    # register as handler for signalrgb://
+    sed -i '/^Exec=/a MimeType=x-scheme-handler/signalrgb;' \
+      $out/share/applications/signalrgb.desktop
+
     runHook postInstall
   '';
-
-  # Start strict so you can see what's missing. Unused Qt platform plugins
-  # (eglfs, linuxfb, vkkhrdisplay, vnc) will probably want libs like libinput
-  # and mtdev. Once the real deps are satisfied, ignore only those.
-  # autoPatchelfIgnoreMissingDeps = [ "libinput.so.10" "libmtdev.so.1" ];
 
   meta = {
     description = "SignalRGB (Linux beta)";

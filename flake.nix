@@ -10,8 +10,7 @@
       system = "x86_64-linux";
       pkgs = import nixpkgs {
         inherit system;
-        config.allowUnfreePredicate =
-          pkg: builtins.elem (nixpkgs.lib.getName pkg) [ "signalrgb" ];
+        config.allowUnfreePredicate = pkg: builtins.elem (nixpkgs.lib.getName pkg) [ "signalrgb" ];
       };
     in
     {
@@ -26,7 +25,12 @@
       };
 
       nixosModules.default =
-        { config, lib, pkgs, ... }:
+        {
+          config,
+          lib,
+          pkgs,
+          ...
+        }:
         let
           cfg = config.programs.signalrgb;
           # Built from this flake's own pkgs, so the unfree allowance above
@@ -37,6 +41,12 @@
           options.programs.signalrgb = {
             enable = lib.mkEnableOption "SignalRGB";
             i2c.enable = lib.mkEnableOption "I2C/SMBus access (RGB RAM, motherboard headers)";
+            autostart = lib.mkEnableOption "Start SignalRGB (minimized) at login";
+            urlHandler.enable =
+              lib.mkEnableOption "Register SignalRGB as the handler for signalrgb:// links"
+              // {
+                default = true;
+              };
           };
 
           config = lib.mkIf cfg.enable {
@@ -48,6 +58,10 @@
             users.groups.i2c = { };
 
             hardware.i2c.enable = lib.mkIf cfg.i2c.enable true;
+
+            xdg.mime.defaultApplications = lib.mkIf cfg.urlHandler.enable {
+              "x-scheme-handler/signalrgb" = "signalrgb.desktop";
+            };
           };
         };
     };
