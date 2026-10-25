@@ -60,15 +60,16 @@
 }:
 
 let
+  version = "2.5.83-7568";
   tessdata = tesseract5.override { enableLanguages = [ "eng" ]; };
 in
 stdenv.mkDerivation {
   pname = "signalrgb";
-  version = "2.5.82-7554";
+  inherit version;
 
   src = fetchurl {
-    url = "https://pkgs.signalrgb.com/apt/pool/beta/main/s/signalrgb/signalrgb_2.5.82-7554_amd64.deb";
-    hash = "sha256-nOc+jhzuVOewWDjdiXiBGMs/vmqrxIikmQEsiI9A+uo=";
+    url = "https://pkgs.signalrgb.com/apt/pool/beta/main/s/signalrgb/signalrgb_${version}_amd64.deb";
+    hash = "sha256-tZ65KCyTdhLXaXTec/7S5NRZAd78KkoO+hUH7tJW6T8=";
   };
 
   nativeBuildInputs = [
@@ -172,5 +173,7 @@ stdenv.mkDerivation {
     homepage = "https://signalrgb.com/linux/";
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    mainProgram = "signalrgb";
   };
 }
