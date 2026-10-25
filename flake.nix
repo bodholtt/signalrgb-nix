@@ -62,6 +62,17 @@
             xdg.mime.defaultApplications = lib.mkIf cfg.urlHandler.enable {
               "x-scheme-handler/signalrgb" = "signalrgb.desktop";
             };
+
+            environment.etc."xdg/autostart/signalrgb.desktop" = lib.mkIf cfg.autostart {
+              text = ''
+                [Desktop Entry]
+                Type=Application
+                Name=SignalRGB
+                Exec=${lib.getExe pkg} --silent
+                Terminal=false
+                X-GNOME-Autostart-enabled=true
+              '';
+            };
           };
         };
     };

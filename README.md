@@ -36,5 +36,8 @@ programs.signalrgb = {
 
     # Optional: I2C/SMBus access for RGB RAM and motherboard headers
     i2c.enable = true;
+
+    # If this app should handle signalrgb:// URLs (default true)
+    urlHandler.enable = true;
 }
 ```
